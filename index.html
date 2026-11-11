@@ -1,0 +1,680 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>智能体自进化文献导航</title>
+<style>
+:root{--paper:#fbfcff;--rail:#eef3fa;--ink:#1a2b47;--muted:#596980;--blue:#234f9f;--line:#d5dfed;--tint:#e0eafa;--white:#fff}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.65 "Microsoft YaHei UI","Microsoft YaHei",Arial,sans-serif}button,input,select{font:inherit}button,a,select,input{touch-action:manipulation}button,a,select{ -webkit-tap-highlight-color:transparent}button{cursor:pointer}a{color:inherit;text-decoration:none}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #d37d1c;outline-offset:3px}button{color:inherit}svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.65;flex:none}button svg{pointer-events:none}button:disabled{cursor:default}.sidebar{width:292px;background:var(--rail);border-right:1px solid var(--line);height:100dvh;position:fixed;top:0;left:0;padding:34px 24px;display:flex;flex-direction:column;z-index:3}.brand{display:flex;align-items:center;gap:13px;padding-bottom:28px}.mark{width:42px;height:46px;display:grid;place-items:center;background:var(--blue);color:white;border-radius:4px}.brand strong{font-size:17px;font-weight:650;display:block;line-height:1.5}.brand small{font-size:12px;color:var(--muted);letter-spacing:.05em}.nav-label{font-size:12px;color:var(--muted);margin:9px 12px 10px}.nav-btn{width:100%;border:0;background:none;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:13px 14px;text-align:left;min-height:51px;margin-bottom:6px;border-radius:6px;font-size:14px;line-height:1.7}.nav-btn:hover{background:#e4ecf7}.nav-btn.active{color:#163f8a;background:#dbe6f7;font-weight:600}.nav-btn .num{font-size:12px;font-variant-numeric:tabular-nums;min-width:21px;line-height:24px;text-align:right;opacity:.8}.nav-divider{height:1px;background:var(--line);margin:16px 0}.workspace{margin-left:292px}.topbar{height:80px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);padding:0 48px;background:#ffffff80;gap:16px}.crumb{font-size:14px;color:var(--muted);display:flex;align-items:center;gap:11px}.crumb svg{width:17px;height:17px}.top-date{font-size:12px;color:var(--muted);white-space:nowrap}.main{padding:38px 48px 55px;max-width:1440px;margin:auto}.heading{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;margin-bottom:27px}.heading h1{font-size:31px;line-height:1.45;font-weight:650;letter-spacing:-.04em;margin:0 0 9px}.heading p{margin:0;color:var(--muted);font-size:14px}.library-total{padding:6px 12px;border:1px solid var(--line);border-radius:5px;color:var(--muted);font-size:12px;white-space:nowrap;margin-top:6px}.searchbox{display:flex;align-items:center;background:white;border:1px solid #b6c7e0;border-radius:7px;padding:0 15px;gap:11px;box-shadow:0 2px 4px #25416604}.searchbox svg{color:var(--blue)}.searchbox input{flex:1;min-width:0;height:54px;background:none;border:0;outline:0;color:var(--ink);font-size:14px}.searchbox input:focus-visible{outline:0}.searchbox:focus-within{outline:2px solid #557bc1;outline-offset:2px}.searchbox input::placeholder{color:#6b7a8d}.shortcut{font-size:12px;line-height:23px;text-align:center;width:25px;height:25px;border:1px solid var(--line);border-radius:4px;color:var(--muted)}.clear-search{display:none;align-items:center;justify-content:center;width:44px;height:44px;border:0;background:transparent;color:var(--muted)}.clear-search.visible{display:flex}.toolbar{display:flex;align-items:center;justify-content:flex-end;gap:15px;margin:20px 0 28px;flex-wrap:wrap}.sort{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}.sort select{border:0;min-height:44px;padding:8px 24px 8px 6px;color:var(--ink);background:transparent;font-size:13px;max-width:160px}.result-meta{font-size:12px;color:var(--muted);margin:0 0 16px;display:flex;justify-content:space-between;gap:12px}.group{margin-bottom:29px}.group-heading{display:flex;align-items:center;gap:10px;border-bottom:1px solid #b9c9df;padding-bottom:10px;margin-bottom:0}.group-heading h2{font-size:15px;font-weight:600;line-height:1.6;margin:0}.group-heading span{color:var(--muted);font-size:12px;white-space:nowrap}.paper{display:grid;grid-template-columns:36px minmax(0,1fr);gap:15px;padding:20px 0 19px;border-bottom:1px solid var(--line);align-items:center}.paper-icon{width:33px;height:42px;display:grid;place-items:center;border:1px solid #c5d4e8;background:#f2f6fd;border-radius:3px;color:#5978a8;align-self:start;margin-top:3px}.paper-icon svg{width:17px}.paper-main{min-width:0}.title{font-family:Arial,"Microsoft YaHei",sans-serif;font-size:17px;line-height:1.45;font-weight:550;display:block;overflow-wrap:anywhere}.title:hover{color:var(--blue);text-decoration:underline;text-underline-offset:4px}.paper-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:8px}.source-tag{font-size:12px;color:#375879;background:#eaf0f8;border-radius:3px;padding:0 6px;line-height:22px}.dot{color:#a9b6c7}.paper-authors{font-size:12px;color:var(--muted);overflow-wrap:anywhere}.empty{padding:58px 20px;text-align:center;border:1px solid var(--line);border-radius:5px;background:white}.empty h2{font-size:19px;margin:0 0 10px}.empty p{font-size:14px;color:var(--muted);margin:0 0 16px}.empty button{background:var(--blue);color:white;min-height:44px;padding:9px 18px;border:0;border-radius:4px}.notice{border:1px solid #b97625;background:#fff5e8;color:#684212;padding:12px;font-size:13px;border-radius:4px;margin-bottom:18px}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+@media(min-width:1600px){.main{padding-right:70px;padding-left:70px}}@media(max-width:1100px){.sidebar{width:260px;padding:28px 18px}.workspace{margin-left:260px}.main{padding:30px 28px}.topbar{padding:0 28px}.paper{gap:11px;grid-template-columns:30px minmax(0,1fr)}.title{font-size:16px}}@media(max-width:760px){.sidebar{position:static;width:auto;height:auto;padding:20px 20px 13px;border:0;border-bottom:1px solid var(--line)}.brand{padding-bottom:16px}.brand strong{font-size:17px}.brand small{display:none}.mark{width:35px;height:38px}.sidebar nav{display:grid;grid-template-columns:1fr 1fr;gap:5px}.nav-label,.nav-divider,.nav-btn{font-size:12px;min-height:54px;padding:9px 10px;margin:0;align-items:center;gap:7px}.nav-btn.all{grid-column:1 / -1;min-height:44px}.nav-btn.all span:first-child{flex:1}.nav-btn .num{min-width:15px}.workspace{margin:0}.topbar{height:50px;padding:0 21px}.crumb{font-size:12px}.top-date{font-size:12px}.main{padding:24px 20px 30px}.heading{gap:10px;margin-bottom:20px}.heading h1{font-size:25px;line-height:1.45}.heading p{font-size:13px}.library-total{display:none}.searchbox{padding:0 11px}.searchbox input{height:50px;font-size:14px}.shortcut{display:none}.toolbar{margin:12px 0 18px;gap:0}.sort{margin-left:auto;justify-content:flex-end}.result-meta{font-size:12px}.group-heading{gap:8px}.group-heading h2{font-size:14px}.paper{grid-template-columns:minmax(0,1fr);gap:6px;padding:18px 0}.paper-icon{display:none}.paper-main{grid-column:1}.title{font-size:16px;line-height:1.55}.paper-authors{font-size:12px}.paper-meta{gap:6px}.empty{padding:36px 16px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style></head><body>
+<aside class="sidebar"><div class="brand"><span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 4h6c2 0 2 2 2 2s0-2 2-2h6v15h-6c-2 0-2 1-2 1s0-1-2-1H4zM12 6v14"/></svg></span><div><strong>智能体自进化<br>文献导航</strong><small>文献库</small></div></div><div class="nav-label">分类</div><nav id="categoryNav" aria-label="文献分类"></nav></aside>
+<div class="workspace"><header class="topbar"><div class="crumb"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h6l2 2h8v12H4z"/></svg><span>智能体自进化文献</span></div><span class="top-date">2026-11-11 导出</span></header><main class="main"><div class="heading"><div><h1 id="pageTitle">文献目录</h1><p id="pageIntro">按分类查找文献，点击标题打开原文。</p></div><span class="library-total">19 篇文献 · 4 个分类</span></div><label class="searchbox"><span class="sr-only">搜索论文、作者或分类</span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><input id="search" type="search" autocomplete="off" placeholder="搜索论文标题、作者或分类" aria-label="搜索论文、作者或分类"><button class="clear-search" id="clearSearch" type="button" aria-label="清除搜索"><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button><kbd class="shortcut">/</kbd></label><div class="toolbar"><label class="sort">排序 <select id="sort" aria-label="文献排序"><option value="title">按标题</option><option value="date">按日期倒序</option></select></label></div><div class="result-meta"><span id="resultCount" role="status" aria-live="polite">19 篇文献</span></div><div id="paperList"></div></main></div>
+<script id="libraryData" type="application/json">{
+  "title": "智能体自进化文献",
+  "rootKey": "D9Y5RPDX",
+  "exportedAt": "2026-11-11",
+  "collections": [
+    {
+      "key": "T3IJ2KRM",
+      "name": "记忆进化与经验积累",
+      "parent": "D9Y5RPDX",
+      "items": [
+        "9YA8H7FE",
+        "Y3YK36VF",
+        "EZQSSW26",
+        "7NKIGRMY",
+        "HG6EPI5S",
+        "EH8FNZKN"
+      ]
+    },
+    {
+      "key": "XCSWRRFD",
+      "name": "技能、策略与 Agent 本身的自进化",
+      "parent": "D9Y5RPDX",
+      "items": [
+        "IAD7QUFG",
+        "RXJJFZRM",
+        "BF3A3S5I",
+        "VXFNNN5F",
+        "74H6PL8V",
+        "KVTINYL3"
+      ]
+    },
+    {
+      "key": "HLGI5WGU",
+      "name": "进化机制的有效性与长期评估",
+      "parent": "D9Y5RPDX",
+      "items": [
+        "JMZ2QG6H",
+        "Z9VN36WZ",
+        "JLSU3Z2D"
+      ]
+    },
+    {
+      "key": "4A45AS3Y",
+      "name": "上下文管理与长时程 Agent 基础设施",
+      "parent": "D9Y5RPDX",
+      "items": [
+        "GUEEWTX8",
+        "NNQHEZSY",
+        "DW8BPEHZ",
+        "7RJLXJCM"
+      ]
+    }
+  ],
+  "items": [
+    {
+      "key": "7RJLXJCM",
+      "title": "ACON: Optimizing Context Compression for Long-horizon LLM Agents",
+      "shortTitle": "ACON",
+      "authors": [
+        "Minki Kang",
+        "Wei-Ning Chen",
+        "Dongge Han",
+        "Huseyin A. Inan",
+        "Lukas Wutschitz",
+        "Yanzhi Chen",
+        "Robert Sim",
+        "Saravan Rajmohan"
+      ],
+      "authorLine": "Minki Kang; Wei-Ning Chen et al.",
+      "year": "2026",
+      "date": "2026-09-29",
+      "url": "https://proceedings.mlr.press/v306/kang26b.html",
+      "originalUrl": "https://proceedings.mlr.press/v306/kang26b.html",
+      "doi": "",
+      "type": "conferencePaper",
+      "source": "PMLR",
+      "venue": "International Conference on Machine Learning",
+      "groups": [
+        "4A45AS3Y"
+      ],
+      "tags": []
+    },
+    {
+      "key": "NNQHEZSY",
+      "title": "Agentic Context Engineering: Evolving Contexts for Self-Improving Language Models",
+      "shortTitle": "Agentic Context Engineering",
+      "authors": [
+        "Qizheng Zhang",
+        "Changran Hu",
+        "Shubhangi Upasani",
+        "Boyuan Ma",
+        "Fenglu Hong",
+        "Vamsidhar Kamanuru",
+        "Jay Rainton",
+        "Chen Wu",
+        "Mengmeng Ji",
+        "Hanchen Li",
+        "Urmish Thakker",
+        "James Zou",
+        "Kunle Olukotun"
+      ],
+      "authorLine": "Qizheng Zhang; Changran Hu et al.",
+      "year": "2026",
+      "date": "2026-03-29",
+      "url": "https://arxiv.org/abs/2510.04618",
+      "originalUrl": "http://arxiv.org/abs/2510.04618",
+      "doi": "10.48550/arXiv.2510.04618",
+      "type": "preprint",
+      "source": "arXiv",
+      "venue": "",
+      "groups": [
+        "4A45AS3Y"
+      ],
+      "tags": [
+        "Computer Science - Artificial Intelligence",
+        "Computer Science - Computation and Language",
+        "Computer Science - Machine Learning"
+      ]
+    },
+    {
+      "key": "JLSU3Z2D",
+      "title": "AgentStream: How Well Do Self-Evolving LLM Agents Perform Under Streaming Tasks?",
+      "shortTitle": "AgentStream",
+      "authors": [
+        "Dong Yan",
+        "Jian Liang",
+        "Dapeng Hu",
+        "Ran He",
+        "Nicholas Jing Yuan",
+        "Qi Zhang",
+        "Tieniu Tan"
+      ],
+      "authorLine": "Dong Yan; Jian Liang et al.",
+      "year": "2026",
+      "date": "2026-09-27",
+      "url": "https://arxiv.org/abs/2608.00155",
+      "originalUrl": "http://arxiv.org/abs/2608.00155",
+      "doi": "10.48550/arXiv.2608.00155",
+      "type": "preprint",
+      "source": "arXiv",
+      "venue": "",
+      "groups": [
+        "HLGI5WGU"
+      ],
+      "tags": [
+        "Computer Science - Artificial Intelligence",
+        "Computer Science - Machine Learning"
+      ]
+    },
+    {
+      "key": "JMZ2QG6H",
+      "title": "Beyond Skill Evolution: Self-Evolving Context Management Policies for Long-Horizon Agent Harnesses",
+      "shortTitle": "Beyond Skill Evolution",
+      "authors": [
+        "Weiyuan Li",
+        "Jinghan Xu",
+        "Aili Chen",
+        "Xintao Wang",
+        "Shuang Liang",
+        "Jiaqing Liang",
+        "Deqing Yang"
+      ],
+      "authorLine": "Weiyuan Li; Jinghan Xu et al.",
+      "year": "2026",
+      "date": "2026-09-28",
+      "url": "https://arxiv.org/abs/2609.34649",
+      "originalUrl": "http://arxiv.org/abs/2609.34649",
+      "doi": "10.48550/arXiv.2609.34649",
+      "type": "preprint",
+      "source": "arXiv",
+      "venue": "",
+      "groups": [
+        "HLGI5WGU"
+      ],
+      "tags": [
+        "Computer Science - Artificial Intelligence"
+      ]
+    },
+    {
+      "key": "EZQSSW26",
+      "title": "Darwinian Memory: A Training-Free Self-Regulating Memory System for GUI Agent Evolution",
+      "shortTitle": "Darwinian Memory",
+      "authors": [
+        "Hongze Mi",
+        "Yibo Feng",
+        "Wenjie Lu",
+        "Song Cao",
+        "Jinyuan Li",
+        "Yanming Li",
+        "Xuelin Zhang",
+        "Haotian Luo",
+        "Songyang Peng",
+        "He Cui",
+        "Tengfei Tian",
+        "Jun Fang",
+        "Hua Chai",
+        "Naiqiang Tan"
+      ],
+      "authorLine": "Hongze Mi; Yibo Feng et al.",
+      "year": "2026",
+      "date": "2026-09-29",
+      "url": "https://proceedings.mlr.press/v306/mi26b.html",
+      "originalUrl": "https://proceedings.mlr.press/v306/mi26b.html",
+      "doi": "",
+      "type": "conferencePaper",
+      "source": "PMLR",
+      "venue": "International Conference on Machine Learning",
+      "groups": [
+        "T3IJ2KRM"
+      ],
+      "tags": []
+    },
+    {
+      "key": "9YA8H7FE",
+      "title": "E-mem: Multi-Agent Based Episodic Context Reconstruction for LLM Agent Memory",
+      "shortTitle": "E-mem",
+      "authors": [
+        "Kaixiang Wang",
+        "Yidan Lin",
+        "Zihan Wang",
+        "Bunyod Suvonov",
+        "Zhaojiacheng Zhou",
+        "Yuxiang Zheng",
+        "Jiaxi Cao",
+        "Zhiheng Dong",
+        "Chentao Wu",
+        "Jiong Lou",
+        "Jie Li"
+      ],
+      "authorLine": "Kaixiang Wang; Yidan Lin et al.",
+      "year": "2026",
+      "date": "2026-09-29",
+      "url": "https://proceedings.mlr.press/v306/wang26ee.html",
+      "originalUrl": "https://proceedings.mlr.press/v306/wang26ee.html",
+      "doi": "",
+      "type": "conferencePaper",
+      "source": "PMLR",
+      "venue": "International Conference on Machine Learning",
+      "groups": [
+        "T3IJ2KRM"
+      ],
+      "tags": []
+    },
+    {
+      "key": "RXJJFZRM",
+      "title": "EvolveR: Self-Evolving LLM Agents through an Experience-Driven Lifecycle",
+      "shortTitle": "EvolveR",
+      "authors": [
+        "Rong Wu",
+        "Xiaoman Wang",
+        "Jianbiao Mei",
+        "Pinlong Cai",
+        "Daocheng Fu",
+        "Cheng Yang",
+        "Licheng Wen",
+        "Xuemeng Yang",
+        "Yufan Shen",
+        "Yuxin Wang",
+        "Botian Shi"
+      ],
+      "authorLine": "Rong Wu; Xiaoman Wang et al.",
+      "year": "2026",
+      "date": "2026-05-16",
+      "url": "https://arxiv.org/abs/2510.16079",
+      "originalUrl": "http://arxiv.org/abs/2510.16079",
+      "doi": "10.48550/arXiv.2510.16079",
+      "type": "preprint",
+      "source": "arXiv",
+      "venue": "",
+      "groups": [
+        "XCSWRRFD"
+      ],
+      "tags": [
+        "Computer Science - Artificial Intelligence",
+        "Computer Science - Computation and Language"
+      ]
+    },
+    {
+      "key": "IAD7QUFG",
+      "title": "Gödel Agent: A Self-Referential Agent Framework for Recursively Self-Improvement",
+      "shortTitle": "Gödel Agent",
+      "authors": [
+        "Xunjian Yin",
+        "Xinyi Wang",
+        "Liangming Pan",
+        "Li Lin",
+        "Xiaojun Wan",
+        "William Yang Wang"
+      ],
+      "authorLine": "Xunjian Yin; Xinyi Wang et al.",
+      "year": "2025",
+      "date": "2025-07",
+      "url": "https://aclanthology.org/2025.acl-long.1354/",
+      "originalUrl": "https://aclanthology.org/2025.acl-long.1354/",
+      "doi": "10.18653/v1/2025.acl-long.1354",
+      "type": "conferencePaper",
+      "source": "ACL Anthology",
+      "venue": "ACL 2025",
+      "groups": [
+        "XCSWRRFD"
+      ],
+      "tags": []
+    },
+    {
+      "key": "Z9VN36WZ",
+      "title": "Large Language Model Agents Are Not Always Faithful Self-Evolvers",
+      "shortTitle": "Large Language Model Agents Are Not Always Faithful Self-Evolvers",
+      "authors": [
+        "Weixiang Zhao",
+        "Yingshuo Wang",
+        "Yichen Zhang",
+        "Yang Deng",
+        "Yanyan Zhao",
+        "Wanxiang Che",
+        "Bing Qin",
+        "Ting Liu"
+      ],
+      "authorLine": "Weixiang Zhao; Yingshuo Wang et al.",
+      "year": "2026",
+      "date": "2026-09-29",
+      "url": "https://proceedings.mlr.press/v306/zhao26aw.html",
+      "originalUrl": "https://proceedings.mlr.press/v306/zhao26aw.html",
+      "doi": "",
+      "type": "conferencePaper",
+      "source": "PMLR",
+      "venue": "International Conference on Machine Learning",
+      "groups": [
+        "HLGI5WGU"
+      ],
+      "tags": []
+    },
+    {
+      "key": "DW8BPEHZ",
+      "title": "Learning Query-Aware Budget-Tier Routing for Runtime Agent Memory",
+      "shortTitle": "Learning Query-Aware Budget-Tier Routing for Runtime Agent Memory",
+      "authors": [
+        "Haozhen Zhang",
+        "Haodong Yue",
+        "Tao Feng",
+        "Quanyu Long",
+        "Jianzhu Bao",
+        "Bowen Jin",
+        "Weizhi Zhang",
+        "Xiao Li",
+        "Jiaxuan You",
+        "Chengwei Qin",
+        "Wenya Wang"
+      ],
+      "authorLine": "Haozhen Zhang; Haodong Yue et al.",
+      "year": "2026",
+      "date": "2026-09-29",
+      "url": "https://proceedings.mlr.press/v306/zhang26ic.html",
+      "originalUrl": "https://proceedings.mlr.press/v306/zhang26ic.html",
+      "doi": "",
+      "type": "conferencePaper",
+      "source": "PMLR",
+      "venue": "International Conference on Machine Learning",
+      "groups": [
+        "4A45AS3Y"
+      ],
+      "tags": []
+    },
+    {
+      "key": "VXFNNN5F",
+      "title": "Memento-Skills: Let Agents Design Agents",
+      "shortTitle": "Memento-Skills",
+      "authors": [
+        "Huichi Zhou",
+        "Siyuan Guo",
+        "Anjie Liu",
+        "Zhongwei Yu",
+        "Ziqin Gong",
+        "Bowen Zhao",
+        "Zhixun Chen",
+        "Menglong Zhang",
+        "Yihang Chen",
+        "Jinsong Li",
+        "Runyu Yang",
+        "Qiangbin Liu",
+        "Xinlei Yu",
+        "Jianmin Zhou",
+        "Na Wang",
+        "Chunyang Sun",
+        "Jun Wang"
+      ],
+      "authorLine": "Huichi Zhou; Siyuan Guo et al.",
+      "year": "2026",
+      "date": "2026-03-19",
+      "url": "https://arxiv.org/abs/2603.18743",
+      "originalUrl": "http://arxiv.org/abs/2603.18743",
+      "doi": "10.48550/arXiv.2603.18743",
+      "type": "preprint",
+      "source": "arXiv",
+      "venue": "",
+      "groups": [
+        "XCSWRRFD"
+      ],
+      "tags": [
+        "Computer Science - Artificial Intelligence",
+        "Computer Science - Computation and Language",
+        "Computer Science - Machine Learning"
+      ]
+    },
+    {
+      "key": "EH8FNZKN",
+      "title": "MemEvolve: Meta-Evolution of Agent Memory Systems",
+      "shortTitle": "MemEvolve",
+      "authors": [
+        "Guibin Zhang",
+        "Haotian Ren",
+        "Chong Zhan",
+        "Junhao Wang",
+        "He Zhu",
+        "Wangchunshu Zhou",
+        "Shuicheng Yan"
+      ],
+      "authorLine": "Guibin Zhang; Haotian Ren et al.",
+      "year": "2026",
+      "date": "2026-09-29",
+      "url": "https://proceedings.mlr.press/v306/zhang26fa.html",
+      "originalUrl": "https://proceedings.mlr.press/v306/zhang26fa.html",
+      "doi": "",
+      "type": "conferencePaper",
+      "source": "PMLR",
+      "venue": "International Conference on Machine Learning",
+      "groups": [
+        "T3IJ2KRM"
+      ],
+      "tags": []
+    },
+    {
+      "key": "Y3YK36VF",
+      "title": "MemSkill: Learning and Evolving Memory Skills for Self-Evolving Agents",
+      "shortTitle": "MemSkill",
+      "authors": [
+        "Haozhen Zhang",
+        "Quanyu Long",
+        "Jianzhu Bao",
+        "Tao Feng",
+        "Weizhi Zhang",
+        "Haodong Yue",
+        "Wenya Wang"
+      ],
+      "authorLine": "Haozhen Zhang; Quanyu Long et al.",
+      "year": "2026",
+      "date": "2026-05-24",
+      "url": "https://arxiv.org/abs/2602.02474",
+      "originalUrl": "http://arxiv.org/abs/2602.02474",
+      "doi": "10.48550/arXiv.2602.02474",
+      "type": "preprint",
+      "source": "arXiv",
+      "venue": "",
+      "groups": [
+        "T3IJ2KRM"
+      ],
+      "tags": [
+        "Computer Science - Artificial Intelligence",
+        "Computer Science - Computation and Language",
+        "Computer Science - Machine Learning"
+      ]
+    },
+    {
+      "key": "74H6PL8V",
+      "title": "MetaSkill-Evolve: Recursive Self-Improvement of LLM Agents via Two-Timescale Meta-Skill Evolution",
+      "shortTitle": "MetaSkill-Evolve",
+      "authors": [
+        "Zefeng Wang",
+        "Minxi Yan",
+        "Jinhe Bi",
+        "Sikuan Yan",
+        "Volker Tresp",
+        "Yunpu Ma"
+      ],
+      "authorLine": "Zefeng Wang; Minxi Yan et al.",
+      "year": "2026",
+      "date": "2026-07-06",
+      "url": "https://arxiv.org/abs/2607.05297",
+      "originalUrl": "http://arxiv.org/abs/2607.05297",
+      "doi": "10.48550/arXiv.2607.05297",
+      "type": "preprint",
+      "source": "arXiv",
+      "venue": "",
+      "groups": [
+        "XCSWRRFD"
+      ],
+      "tags": [
+        "Computer Science - Artificial Intelligence"
+      ]
+    },
+    {
+      "key": "KVTINYL3",
+      "title": "MUSE-Autoskill: Self-Evolving Agents via Skill Creation, Memory, Management, and Evaluation",
+      "shortTitle": "MUSE-Autoskill",
+      "authors": [
+        "Huawei Lin",
+        "Peng Li",
+        "Jie Song",
+        "Fuxin Jiang",
+        "Tieying Zhang"
+      ],
+      "authorLine": "Huawei Lin; Peng Li et al.",
+      "year": "2026",
+      "date": "2026-07-03",
+      "url": "https://arxiv.org/abs/2605.27366",
+      "originalUrl": "http://arxiv.org/abs/2605.27366",
+      "doi": "10.48550/arXiv.2605.27366",
+      "type": "preprint",
+      "source": "arXiv",
+      "venue": "",
+      "groups": [
+        "XCSWRRFD"
+      ],
+      "tags": [
+        "Computer Science - Artificial Intelligence",
+        "Computer Science - Computation and Language",
+        "Computer Science - Machine Learning",
+        "Computer Science - Multiagent Systems"
+      ]
+    },
+    {
+      "key": "7NKIGRMY",
+      "title": "RGMem: Renormalization Group–inspired Memory Evolution for Language Agents",
+      "shortTitle": "RGMem",
+      "authors": [
+        "Ao Tian",
+        "Yunfeng Lu",
+        "Xinxin Fan",
+        "Changhao Wang",
+        "Lanzhi Zhou",
+        "Yeyao Zhang",
+        "Yanfang Liu"
+      ],
+      "authorLine": "Ao Tian; Yunfeng Lu et al.",
+      "year": "2026",
+      "date": "2026-09-29",
+      "url": "https://proceedings.mlr.press/v306/tian26g.html",
+      "originalUrl": "https://proceedings.mlr.press/v306/tian26g.html",
+      "doi": "",
+      "type": "conferencePaper",
+      "source": "PMLR",
+      "venue": "International Conference on Machine Learning",
+      "groups": [
+        "T3IJ2KRM"
+      ],
+      "tags": []
+    },
+    {
+      "key": "BF3A3S5I",
+      "title": "Scaling Self-Evolving Agents via Parametric Memory",
+      "shortTitle": "Scaling Self-Evolving Agents via Parametric Memory",
+      "authors": [
+        "Tao Ren",
+        "Weiyao Luo",
+        "Hui Yang",
+        "Rongzhi Zhu",
+        "Xiang Huang",
+        "Yuchuan Wu",
+        "Bingxue Chou",
+        "Jieping Ye",
+        "Jiafeng Liang",
+        "Yongbin Li",
+        "Yijie Peng"
+      ],
+      "authorLine": "Tao Ren; Weiyao Luo et al.",
+      "year": "2026",
+      "date": "2026-06-03",
+      "url": "https://arxiv.org/abs/2606.04536",
+      "originalUrl": "http://arxiv.org/abs/2606.04536",
+      "doi": "10.48550/arXiv.2606.04536",
+      "type": "preprint",
+      "source": "arXiv",
+      "venue": "",
+      "groups": [
+        "XCSWRRFD"
+      ],
+      "tags": [
+        "Computer Science - Artificial Intelligence"
+      ]
+    },
+    {
+      "key": "GUEEWTX8",
+      "title": "TokenPilot: Cache-Efficient Context Management for LLM Agents",
+      "shortTitle": "TokenPilot",
+      "authors": [
+        "Buqiang Xu",
+        "Zirui Xue",
+        "Dianmou Chen",
+        "Chenyang Fu",
+        "Chiyu Wu",
+        "Caiying Huang",
+        "Chen Jiang",
+        "Jizhan Fang",
+        "Xinle Deng",
+        "Yijun Chen",
+        "Yunzhi Yao",
+        "Xuehai Wang",
+        "Jin Shang",
+        "Gong Yu",
+        "Ningyu Zhang"
+      ],
+      "authorLine": "Buqiang Xu; Zirui Xue et al.",
+      "year": "2026",
+      "date": "2026-08-28",
+      "url": "https://arxiv.org/abs/2606.17016",
+      "originalUrl": "http://arxiv.org/abs/2606.17016",
+      "doi": "10.48550/arXiv.2606.17016",
+      "type": "preprint",
+      "source": "arXiv",
+      "venue": "",
+      "groups": [
+        "4A45AS3Y"
+      ],
+      "tags": [
+        "Computer Science - Artificial Intelligence",
+        "Computer Science - Computation and Language",
+        "Computer Science - Machine Learning",
+        "Computer Science - Multiagent Systems"
+      ]
+    },
+    {
+      "key": "HG6EPI5S",
+      "title": "UMEM: Unified Memory Extraction and Management Framework for Generalizable Memory",
+      "shortTitle": "UMEM",
+      "authors": [
+        "Yongshi Ye",
+        "Hui Jiang",
+        "Feihu Jiang",
+        "Tian Lan",
+        "Yichao Du",
+        "Biao Fu",
+        "Xiaodong Shi",
+        "Qianghuai Jia",
+        "Longyue Wang",
+        "Weihua Luo"
+      ],
+      "authorLine": "Yongshi Ye; Hui Jiang et al.",
+      "year": "2026",
+      "date": "2026-09-29",
+      "url": "https://proceedings.mlr.press/v306/ye26j.html",
+      "originalUrl": "https://proceedings.mlr.press/v306/ye26j.html",
+      "doi": "",
+      "type": "conferencePaper",
+      "source": "PMLR",
+      "venue": "International Conference on Machine Learning",
+      "groups": [
+        "T3IJ2KRM"
+      ],
+      "tags": []
+    }
+  ]
+}</script><script>
+ 'use strict';
+const LIB=JSON.parse(document.getElementById('libraryData').textContent);
+let category='all',query='',sort='title';
+const byId=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const safeUrl=s=>{try{const u=new URL(s);return ['https:','http:'].includes(u.protocol)?u.href:'#';}catch{return '#';}};
+const fileIcon='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l4 4v14H6zM14 3v5h4M9 12h6M9 16h6"/></svg>';
+function drawNav(){byId('categoryNav').innerHTML=`<button type="button" class="nav-btn all ${category==='all'?'active':''}" data-category="all" aria-pressed="${category==='all'}"><span>全部文献</span><span class="num">${LIB.items.length}</span></button>`+LIB.collections.map(g=>`<button type="button" class="nav-btn ${category===g.key?'active':''}" data-category="${esc(g.key)}" aria-pressed="${category===g.key}"><span>${esc(g.name)}</span><span class="num">${g.items.length}</span></button>`).join('');}
+function matches(p){const names=p.groups.map(k=>LIB.collections.find(g=>g.key===k)?.name||'').join(' ');const hay=[p.title,...p.authors,p.source,p.year,names,...p.tags].join(' ').toLocaleLowerCase();return(category==='all'||p.groups.includes(category))&&(!query||hay.includes(query.toLocaleLowerCase()));}
+function paperHTML(p){return `<article class="paper" data-key="${esc(p.key)}"><span class="paper-icon" aria-hidden="true">${fileIcon}</span><div class="paper-main"><a class="title" href="${esc(safeUrl(p.url))}" target="_blank" rel="noopener noreferrer">${esc(p.title)}</a><div class="paper-meta"><span>${esc(p.year)}</span><span class="source-tag">${esc(p.source)}</span><span class="paper-authors">${esc(p.authorLine)}</span></div></div></article>`;}
+function render(){const filtered=LIB.items.filter(matches).sort((a,b)=>sort==='date'?b.date.localeCompare(a.date)||a.title.localeCompare(b.title):a.title.localeCompare(b.title));let blocks='';for(const g of LIB.collections){const list=filtered.filter(p=>p.groups.includes(g.key));if(list.length)blocks+=`<section class="group"><div class="group-heading"><h2>${esc(g.name)}</h2><span>${list.length} 篇</span></div>${list.map(paperHTML).join('')}</section>`;}byId('paperList').innerHTML=blocks||'<section class="empty"><h2>没有找到匹配的文献</h2><p>可以换个关键词，或清除分类和搜索条件。</p><button type="button" id="resetFilters">清除全部筛选</button></section>';byId('resultCount').textContent=`显示 ${filtered.length} / ${LIB.items.length} 篇文献`;const selected=LIB.collections.find(g=>g.key===category);byId('pageTitle').textContent=selected?selected.name:'文献目录';byId('pageIntro').textContent=selected?`本分类收录 ${selected.items.length} 篇文献，分类归属与 Zotero 一致。`:'按分类查找文献，点击标题打开原文。';byId('clearSearch').classList.toggle('visible',!!query);}
+byId('categoryNav').addEventListener('click',e=>{const b=e.target.closest('[data-category]');if(b){category=b.dataset.category;drawNav();render();byId('categoryNav').querySelector(`[data-category="${category}"]`)?.focus({preventScroll:true});}});
+byId('search').addEventListener('input',e=>{query=e.target.value.trim();render();});
+byId('clearSearch').addEventListener('click',()=>{query='';byId('search').value='';render();byId('search').focus();});
+byId('sort').addEventListener('change',e=>{sort=e.target.value;render();});
+byId('paperList').addEventListener('click',e=>{if(e.target.closest('#resetFilters')){query='';category='all';byId('search').value='';drawNav();render();byId('search').focus();}});
+document.addEventListener('keydown',e=>{if(e.key==='/'&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName)&&!e.ctrlKey&&!e.metaKey){e.preventDefault();byId('search').focus();}});
+drawNav();render();
+</script></body></html>
